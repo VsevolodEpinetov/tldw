@@ -1,0 +1,15 @@
+{
+  "name": "tldw",
+  "description": "tldw: Claude watches a video by link or from a file, fully on your machine.",
+  "owner": {
+    "name": "Vsevolod Epinetov",
+    "email": "vsevolod@epinetov.com"
+  },
+  "plugins": [
+    {
+      "name": "tldw",
+      "source": "./",
+      "description": "Claude watches a video by link or from a file, fully on your machine."
+    }
+  ]
+}

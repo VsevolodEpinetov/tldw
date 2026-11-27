@@ -1,0 +1,13 @@
+{
+  "name": "tldw",
+  "version": "0.1.0",
+  "description": "Too long; didn't watch. Claude watches a video by link or from a file: yt-dlp, ffmpeg frames and local Whisper. No API keys, no browser cookies.",
+  "author": {
+    "name": "Vsevolod Epinetov",
+    "email": "vsevolod@epinetov.com"
+  },
+  "homepage": "https://github.com/VsevolodEpinetov/tldw",
+  "repository": "https://github.com/VsevolodEpinetov/tldw",
+  "license": "MIT",
+  "keywords": ["video", "reels", "transcription", "whisper", "ffmpeg", "yt-dlp"]
+}

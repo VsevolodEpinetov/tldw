@@ -1,0 +1,23 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install uv and ffmpeg
+        run: brew install uv ffmpeg
+      - name: Self-test
+        run: uv run skills/tldw/watch.py --selftest
+      - name: SkillSpector static scan
+        run: |
+          uv tool install --python 3.13 "git+https://github.com/NVIDIA/SkillSpector.git@02894ec5b8a0a70637df5a6b45763de92940cedd"
+          skillspector scan skills/tldw --no-llm --fail-on-incomplete
