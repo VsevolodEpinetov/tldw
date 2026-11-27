@@ -40,7 +40,6 @@ What it is good for:
 - A friend sends a reel with "ten things to buy for your home". You get the ten things as a list, with the moment each one appears.
 - A 40-minute conference talk. You get the three points that matter and where to jump to.
 - A recipe video. You get the ingredients and the steps as text.
-- A screen recording of a bug. Claude reads the error on the screen and tells you what broke.
 - A video in a language you don't speak. You get the gist in yours.
 
 The first run downloads the Whisper `small` model from Hugging Face and takes a few minutes. After that a one-minute clip takes seconds to download and cut, plus transcription time on your CPU.
