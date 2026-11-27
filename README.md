@@ -1,4 +1,4 @@
-![Too long; didn't watch](assets/social-preview.jpg)
+![Too long; didn't watch](assets/poster.jpg)
 
 # tldw
 
