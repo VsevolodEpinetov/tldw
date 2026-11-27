@@ -1,3 +1,5 @@
+![Too long; didn't watch](assets/social-preview.jpg)
+
 # tldw
 
 Too long; didn't watch. A Claude Code skill that watches a video for you.
@@ -5,6 +7,8 @@ Too long; didn't watch. A Claude Code skill that watches a video for you.
 Give Claude a link to an Instagram Reel, a YouTube video, a TikTok or a local file. The skill downloads the video, cuts frames, transcribes the speech, and Claude reads both to tell you what is in it or answer a question about it.
 
 Everything runs on your machine. There are no API keys, the skill never reads browser cookies, and nothing is uploaded to a third-party service.
+
+![A 12-minute film turned into 60 frames, 46 transcript lines and one answer](assets/demo.jpg)
 
 ## Install
 
@@ -46,7 +50,7 @@ One script, [`skills/tldw/watch.py`](skills/tldw/watch.py), about 260 lines:
 You can run the script without Claude:
 
 ```bash
-uv run skills/tldw/watch.py "https://www.youtube.com/watch?v=jNQXAC9IVRw"
+uv run skills/tldw/watch.py "https://www.instagram.com/reel/<id>/"
 uv run skills/tldw/watch.py clip.mp4 --lang ru --frames 30
 uv run skills/tldw/watch.py --selftest
 ```
@@ -72,9 +76,14 @@ The caption, transcript and on-screen text of a video are untrusted content. The
 ## Limits
 
 - Videos behind a login wall are not downloaded.
+- YouTube may answer "Sign in to confirm you're not a bot" after a couple of downloads from the same address. The skill has no way around that; download the video yourself and pass the file.
 - Whisper `small` gets occasional words wrong, mostly names. On-screen text in the frames usually fills the gap.
 - Language auto-detection is unreliable on very short clips. Pass `--lang`.
 - Tested on macOS with Apple Silicon. Linux should work; Windows is untested.
+
+## Credits
+
+The demo frames are from [Tears of Steel](https://mango.blender.org/), (CC) Blender Foundation, licensed under CC BY 3.0.
 
 ## License
 
