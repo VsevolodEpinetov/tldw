@@ -4,7 +4,7 @@
 **Source:** `skills/tldw`  
 **Input origin:** `skills/tldw`  
 **Input type:** directory  
-**Scanned:** 2026-11-27 10:56:11 UTC  
+**Scanned:** 2026-11-27 11:18:49 UTC  
 
 ## Risk Assessment
 
@@ -18,8 +18,8 @@
 
 | File | Type | Lines | Executable |
 |------|------|-------|------------|
-| `SKILL.md` | markdown | 46 | No |
-| `watch.py` | python | 261 | Yes |
+| `SKILL.md` | markdown | 47 | No |
+| `watch.py` | python | 278 | Yes |
 
 ## Issues (3)
 
@@ -36,7 +36,7 @@
 
 ### 🟡 MEDIUM: AST4
 
-**Location:** `watch.py:162–166`  
+**Location:** `watch.py:172–176`  
 **Confidence:** 70%  
 
 **Message:** subprocess module call
@@ -72,10 +72,10 @@
 
 | Reason / Status | Location | Details |
 |-----------------|----------|---------|
-| reference\_missing | `SKILL.md:28-28` | A local path\-like reference does not match any bundled artifact, such as a file the skill writes at runtime\. |
 | reference\_missing | `SKILL.md:29-29` | A local path\-like reference does not match any bundled artifact, such as a file the skill writes at runtime\. |
 | reference\_missing | `SKILL.md:30-30` | A local path\-like reference does not match any bundled artifact, such as a file the skill writes at runtime\. |
-| reference\_missing | `SKILL.md:34-34` | A local path\-like reference does not match any bundled artifact, such as a file the skill writes at runtime\. |
+| reference\_missing | `SKILL.md:31-31` | A local path\-like reference does not match any bundled artifact, such as a file the skill writes at runtime\. |
+| reference\_missing | `SKILL.md:35-35` | A local path\-like reference does not match any bundled artifact, such as a file the skill writes at runtime\. |
 
 ### Analyzer Statuses
 

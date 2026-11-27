@@ -1,7 +1,7 @@
 {
   "name": "tldw",
   "version": "0.1.0",
-  "description": "Too long; didn't watch. Claude watches a video by link or from a file: yt-dlp, ffmpeg frames and local Whisper. No API keys, no browser cookies.",
+  "description": "Too long; didn't watch. Claude watches a video by link or from a file: yt-dlp, ffmpeg frames and local Whisper. No API keys, never reads your browser.",
   "author": {
     "name": "Vsevolod Epinetov",
     "email": "vsevolod@epinetov.com"

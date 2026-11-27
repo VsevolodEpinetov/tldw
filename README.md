@@ -6,7 +6,7 @@ Too long; didn't watch. A Claude Code skill that watches a video for you.
 
 Give Claude a link to an Instagram Reel, a YouTube video, a TikTok or a local file. The skill downloads the video, cuts frames, transcribes the speech, and Claude reads both to tell you what is in it or answer a question about it.
 
-Everything runs on your machine. There are no API keys, the skill never reads browser cookies, and nothing is uploaded to a third-party service.
+Everything runs on your machine. There are no API keys, the skill never reads your browser, and nothing is uploaded to a third-party service.
 
 ![A 12-minute film turned into 60 frames, 46 transcript lines and one answer](assets/demo.jpg)
 
@@ -39,7 +39,7 @@ The first run downloads the Whisper `small` model from Hugging Face and takes a 
 
 ## How it works
 
-One script, [`skills/tldw/watch.py`](skills/tldw/watch.py), about 260 lines:
+One script, [`skills/tldw/watch.py`](skills/tldw/watch.py), about 280 lines:
 
 1. `yt-dlp` downloads the video, capped at 720p and 500 MB.
 2. `ffmpeg` cuts evenly spaced frames, 16 to 60 depending on the length.
@@ -55,6 +55,20 @@ uv run skills/tldw/watch.py clip.mp4 --lang ru --frames 30
 uv run skills/tldw/watch.py --selftest
 ```
 
+## Login walls
+
+When a site demands a login, you have two options.
+
+Download the video yourself and pass the file. This is the safe default.
+
+Or export cookies for that one site to a Netscape-format `cookies.txt` with a browser extension and pass it:
+
+```bash
+uv run skills/tldw/watch.py "https://www.instagram.com/reel/<id>/" --cookies ~/cookies.txt
+```
+
+The script works on a temporary copy of the file and deletes the copy when the download ends, so your file is not modified. Two things to know before you do this: a cookies file is a live login session, so store it like a password, and sites can restrict accounts that make automated requests, so use a spare account.
+
 ## Security
 
 A skill is someone else's code and instructions running inside your agent, so this one is kept small enough to read in one sitting, and it is scanned with [NVIDIA SkillSpector](https://github.com/NVIDIA/SkillSpector).
@@ -67,7 +81,7 @@ The full reports are in [`docs/`](docs/).
 
 What the skill does not do, on purpose:
 
-- It does not read browser cookies or any credentials file. If a site demands a login, download the video yourself and pass the file.
+- It does not read your browser's cookie store or look for credentials on its own. The only login material it ever touches is a cookies file you pass explicitly with `--cookies`.
 - It does not send audio, frames or transcripts anywhere. Transcription is local.
 - It does not read environment variables.
 
@@ -75,8 +89,7 @@ The caption, transcript and on-screen text of a video are untrusted content. The
 
 ## Limits
 
-- Videos behind a login wall are not downloaded.
-- YouTube may answer "Sign in to confirm you're not a bot" after a couple of downloads from the same address. The skill has no way around that; download the video yourself and pass the file.
+- Videos behind a login wall are not downloaded by default. YouTube, for one, may answer "Sign in to confirm you're not a bot" after a couple of downloads from the same address. See [Login walls](#login-walls).
 - Whisper `small` gets occasional words wrong, mostly names. On-screen text in the frames usually fills the gap.
 - Language auto-detection is unreliable on very short clips. Pass `--lang`.
 - Tested on macOS with Apple Silicon. Linux should work; Windows is untested.

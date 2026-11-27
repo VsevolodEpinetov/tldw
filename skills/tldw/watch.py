@@ -11,7 +11,7 @@
 """Turn a video (URL or local file) into frames + a transcript an agent can read.
 
 Usage:
-    uv run watch.py <url-or-path> [--frames N] [--lang ru] [--no-audio]
+    uv run watch.py <url-or-path> [--frames N] [--lang ru] [--no-audio] [--cookies FILE]
     uv run watch.py --selftest
 
 Everything runs locally: yt-dlp downloads, ffmpeg cuts frames, faster-whisper
@@ -61,7 +61,7 @@ def frame_budget(duration_seconds: float) -> int:
     return 60
 
 
-def download(url: str, run_dir: Path) -> tuple[Path, dict]:
+def download(url: str, run_dir: Path, cookies: Path | None) -> tuple[Path, dict]:
     from yt_dlp import YoutubeDL
     from yt_dlp.utils import DownloadError
 
@@ -77,11 +77,21 @@ def download(url: str, run_dir: Path) -> tuple[Path, dict]:
         "noprogress": True,
         "no_warnings": True,
     }
+    session_copy = None
+    if cookies is not None:
+        # yt-dlp writes refreshed cookies back to the file it is given, so it gets a throwaway copy.
+        session_copy = run_dir / "cookies.txt"
+        shutil.copyfile(cookies, session_copy)
+        session_copy.chmod(0o600)
+        options["cookiefile"] = str(session_copy)
     try:
         with YoutubeDL(options) as downloader:
             info = downloader.extract_info(url, download=True)
     except DownloadError as error:
         fail(f"download failed: {error}")
+    finally:
+        if session_copy is not None:
+            session_copy.unlink(missing_ok=True)
     video_files = sorted(run_dir.glob("source.*"))
     if not video_files:
         fail("download finished but no file was written (size limit or login wall)")
@@ -189,7 +199,12 @@ def watch(source: str, options: argparse.Namespace) -> dict:
     run_dir.mkdir(parents=True)
     post = None
     if urlparse(source).scheme in ("http", "https"):
-        video, post = download(source, run_dir)
+        cookies = None
+        if options.cookies:
+            cookies = Path(options.cookies).expanduser()
+            if not cookies.is_file():
+                fail(f"cookies file not found: {options.cookies}")
+        video, post = download(source, run_dir, cookies)
     else:
         video = Path(source).expanduser().resolve()
         if not video.is_file():
@@ -226,7 +241,7 @@ def selftest() -> None:
             "-f", "lavfi", "-i", "testsrc=duration=6:size=320x240:rate=10",
             "-pix_fmt", "yuv420p", str(sample),
         ])
-        options = argparse.Namespace(frames=6, lang=None, no_audio=True)
+        options = argparse.Namespace(frames=6, lang=None, no_audio=True, cookies=None)
         result = watch(str(sample), options)
         try:
             assert result["duration_seconds"] == 6.0, result
@@ -245,6 +260,8 @@ def main() -> None:
     parser.add_argument("--frames", type=int, help="frames to cut before dedup (default: by duration)")
     parser.add_argument("--lang", help="spoken language as ISO code, e.g. ru (default: auto-detect)")
     parser.add_argument("--no-audio", action="store_true", help="skip transcription")
+    parser.add_argument("--cookies", metavar="FILE",
+                        help="Netscape-format cookies file for a site that demands a login (opt-in)")
     parser.add_argument("--selftest", action="store_true")
     options = parser.parse_args()
     if options.selftest:
